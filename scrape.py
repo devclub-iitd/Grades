@@ -6,7 +6,7 @@ import string
 import socket
 import httplib
 import ssl
-def connect(self):
+def connect(self):		#some code to deal with certificate validation
     sock = socket.create_connection((self.host, self.port),
                                 self.timeout, self.source_address)
     if self._tunnel_host:
