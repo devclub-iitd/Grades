@@ -42,10 +42,7 @@ def find_grades(username,password):
 	# The site we will navigate into, handling it's session
 	br.open('https://academics1.iitd.ac.in')
 
-	# View available forms
-	for f in br.forms():
-	    print f
-
+	
 	# Select the second (index one) form (the first form is a search query box)
 	br.select_form(nr=0)
 
