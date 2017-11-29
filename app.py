@@ -65,6 +65,10 @@ def find_grades(username,password):
 		return main()
 		#return "Invalid Login!!"
 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link).read()
+	print
+	gradesheet = gradesheet.replace("css/style.css","https://academics1.iitd.ac.in/Academics/css/style.css")
+	gradesheet = gradesheet.replace("js/jquery-1.11.3.min.js","https://academics1.iitd.ac.in/Academics/js/jquery-1.11.3.min.js")
+	print gradesheet
 	return gradesheet
 		
 
