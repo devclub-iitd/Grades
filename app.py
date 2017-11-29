@@ -62,7 +62,7 @@ def find_grades(username,password):
 		return main()
 		#return "Invalid Login!!"
 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link).read()
-	print
+	#print
 	gradesheet = gradesheet.replace("css/style.css","https://academics1.iitd.ac.in/Academics/css/style.css")
 	gradesheet = gradesheet.replace("js/jquery-1.11.3.min.js","https://academics1.iitd.ac.in/Academics/js/jquery-1.11.3.min.js")
 	gradesheet = gradesheet.replace("Site Developed &amp; Maintained by : IIT Delhi","Site Developed &amp; Maintained by : DevClub IIT Delhi")
@@ -70,7 +70,7 @@ def find_grades(username,password):
 	gradesheet = gradesheet.replace("&nbsp;&nbsp;Logout&nbsp;&nbsp;","")
 	gradesheet = gradesheet.replace("\" id=\"home_button\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
 	gradesheet = gradesheet.replace("\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
-	print gradesheet
+	#print gradesheet
 	return gradesheet
 		
 
