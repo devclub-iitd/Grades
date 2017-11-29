@@ -1,0 +1,15 @@
+beautifulsoup4==4.6.0
+bs4==0.0.1
+click==6.7
+Flask==0.12.2
+html2text==2017.10.4
+html5lib==0.999999999
+itsdangerous==0.24
+Jinja2==2.10
+lxml==4.1.1
+MarkupSafe==1.0
+mechanize==0.3.6
+pkg-resources==0.0.0
+six==1.11.0
+webencodings==0.5.1
+Werkzeug==0.12.2
