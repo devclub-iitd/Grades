@@ -55,7 +55,7 @@ def find_grades(username,password):
 	soup = BeautifulSoup(str(br.open(br.geturl()).read()),"lxml")
 	link=None
 	for i in soup.find_all('a'):
-		if 'grade' in str(i.get('href')):
+		if 'vgrd' in str(i.get('href')):
 			link=i.get('href')
 			break
 	if link is None:
@@ -104,7 +104,7 @@ def static_file(path):
     return app.send_static_file(path)
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=5050)
 
 
 
