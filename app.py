@@ -105,8 +105,3 @@ def static_file(path):
 
 if __name__ == "__main__":
     app.run(port=5050)
-
-
-
-
-

@@ -1,5 +1,7 @@
 *.pyc
+
 venv/*
+
 venv
 
 
