@@ -2,7 +2,7 @@ from flask import Flask, render_template,request
 #from scrape import find_grades
 import mechanize
 import cookielib
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup,NavigableString
 import html2text
 import string
 import socket
@@ -10,7 +10,7 @@ import httplib
 import ssl
 
 def find_grades(username,password):
-	
+
 	def connect(self):		#some code to deal with certificate validation
     		sock = socket.create_connection((self.host, self.port),
                                 self.timeout, self.source_address)
@@ -42,7 +42,7 @@ def find_grades(username,password):
 	# The site we will navigate into, handling it's session
 	br.open('https://academics1.iitd.ac.in')
 
-	
+
 	# Select the second (index one) form (the first form is a search query box)
 	br.select_form(nr=0)
 
@@ -63,16 +63,36 @@ def find_grades(username,password):
 		#return "Invalid Login!!"
 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link).read()
 	#print
-	gradesheet = gradesheet.replace("css/style.css","https://academics1.iitd.ac.in/Academics/css/style.css")
-	gradesheet = gradesheet.replace("js/jquery-1.11.3.min.js","https://academics1.iitd.ac.in/Academics/js/jquery-1.11.3.min.js")
-	gradesheet = gradesheet.replace("Site Developed &amp; Maintained by : IIT Delhi","Site Developed &amp; Maintained by : DevClub IIT Delhi")
-	gradesheet = gradesheet.replace("&nbsp;&nbsp; Home &nbsp;&nbsp;","")
-	gradesheet = gradesheet.replace("&nbsp;&nbsp;Logout&nbsp;&nbsp;","")
-	gradesheet = gradesheet.replace("\" id=\"home_button\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
-	gradesheet = gradesheet.replace("\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
-	#print gradesheet
-	return gradesheet
-		
+	def remove_attrs(soup):
+	    for tag in soup.findAll(True):
+	        tag.attrs = None
+	    return soup
+
+	page = open("table.html",'r')
+	template = BeautifulSoup(page.read(),"html5lib")
+
+	# table_tag = soup.find('table')
+
+	soup = BeautifulSoup(gradesheet,"html5lib")
+	soup_without_attributes=remove_attrs(soup)
+	final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')[2].contents[0]
+	for x in final_soup.find_all():
+	    if len(x.text) == 0:
+	        x.extract()
+
+	template.table.append(final_soup)
+	# table_tag.insert(0, NavigableString( str(final_soup)))
+	# print(final_soup)
+	# gradesheet = gradesheet.replace("css/style.css","https://academics1.iitd.ac.in/Academics/css/style.css")
+	# gradesheet = gradesheet.replace("js/jquery-1.11.3.min.js","https://academics1.iitd.ac.in/Academics/js/jquery-1.11.3.min.js")
+	# gradesheet = gradesheet.replace("Site Developed &amp; Maintained by : IIT Delhi","Site Developed &amp; Maintained by : DevClub IIT Delhi")
+	# gradesheet = gradesheet.replace("&nbsp;&nbsp; Home &nbsp;&nbsp;","")
+	# gradesheet = gradesheet.replace("&nbsp;&nbsp;Logout&nbsp;&nbsp;","")
+	# gradesheet = gradesheet.replace("\" id=\"home_button\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
+	# gradesheet = gradesheet.replace("\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
+	print str(template)
+	return str(template)
+
 
 
 
@@ -81,22 +101,22 @@ def find_grades(username,password):
 
 
 app = Flask(__name__,
-            static_url_path='', 
+            static_url_path='',
             static_folder='static',
             template_folder='templates')
 
 
 
 @app.route("/")
-def main():	
+def main():
     return render_template('index.html')
 
 @app.route("/",methods=['POST'])
-def main_form():	
+def main_form():
 	username=request.form['username']
 	password=request.form['password']
 	return find_grades(username,password)
-    	
+
 
 
 @app.route('/<path:path>')
