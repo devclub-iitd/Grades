@@ -59,7 +59,7 @@ def find_grades(username,password):
 			link=i.get('href')
 			break
 	if link is None:
-		return main()
+		return main(True)
 		#return "Invalid Login!!"
 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link).read()
 	#print
@@ -81,16 +81,6 @@ def find_grades(username,password):
 	        x.extract()
 
 	template.table.append(final_soup)
-	# table_tag.insert(0, NavigableString( str(final_soup)))
-	# print(final_soup)
-	# gradesheet = gradesheet.replace("css/style.css","https://academics1.iitd.ac.in/Academics/css/style.css")
-	# gradesheet = gradesheet.replace("js/jquery-1.11.3.min.js","https://academics1.iitd.ac.in/Academics/js/jquery-1.11.3.min.js")
-	# gradesheet = gradesheet.replace("Site Developed &amp; Maintained by : IIT Delhi","Site Developed &amp; Maintained by : DevClub IIT Delhi")
-	# gradesheet = gradesheet.replace("&nbsp;&nbsp; Home &nbsp;&nbsp;","")
-	# gradesheet = gradesheet.replace("&nbsp;&nbsp;Logout&nbsp;&nbsp;","")
-	# gradesheet = gradesheet.replace("\" id=\"home_button\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
-	# gradesheet = gradesheet.replace("\"></a></td>","pointer-events: none;cursor: default;\"  disabled=\"disabled\" ></a></td>")
-	print str(template)
 	return str(template)
 
 
@@ -108,8 +98,12 @@ app = Flask(__name__,
 
 
 @app.route("/")
-def main():
-    return render_template('index.html')
+def main(invalid_password=False):
+    if invalid_password:
+	error="Login details do not match"
+	return render_template('index.html',error=error)
+    else:
+    	return render_template('index.html')
 
 @app.route("/",methods=['POST'])
 def main_form():
