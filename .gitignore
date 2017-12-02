@@ -4,4 +4,17 @@ venv/*
 
 venv
 
+*.pyc
+*~
+*.swp
+
+__pycache__
+
+.DS_Store
+
+.idea/
+ignore/
+
+*.out
+.m~
 
