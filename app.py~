@@ -90,7 +90,7 @@ def find_grades(username,password):
 				x.extract()
 		print(final_soup)
 		limit=len(final_soup)
-		for i in range(2,limit):
+		for i in range(4,limit):
 			##final_soup[i]
 			template.div.append(final_soup[i])
 
