@@ -87,8 +87,8 @@ def find_grades(username,password):
 		for div in final_soup:
 			for x in div.find_all():
 			    if len(x.text) == 0:
-				x.extract()
-		print(final_soup)
+					x.extract()
+		# print(final_soup)
 		limit=len(final_soup)
 		for i in range(2,limit):
 			##final_soup[i]
@@ -104,10 +104,10 @@ def find_grades(username,password):
 		soup = BeautifulSoup(gradesheet,"html5lib")
 		soup_without_attributes=remove_attrs(soup)
 		final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')[2]
-		print (final_soup)		
+		# print (final_soup)		
 		for x in final_soup.find_all():
 		    if len(x.text) == 0:
-			x.extract()
+				x.extract()
 
 		template.div.append(final_soup)
 
