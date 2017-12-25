@@ -207,6 +207,13 @@ background-color: white; /* Green */
 <body>
 <div class="aa_htmlTable">
 	<a href><button type="button" id="btnhome">Logout</button></a>
+  <table>
+
+
+
+
+
+</table>
 <p align="center" style="font-family: 'Open Sans', sans-serif;color:white;">Got Low Grades? Checkout <a style="color: black;" href="http://study.devclub.cse.iitd.ac.in/">StudyPortal</a>
 <br/>
   <img src="img.jpg" style="border-radius:20px" height="200" width="200"/>

@@ -18,7 +18,7 @@
 	<div style="border-radius:15px; z-index: 2; position: absolute; top: 0px; left: 0px;  height:50vh; width:40vw; background:#023; opacity:0.5; margin-top:20vh; margin-left:30vw; text-align:center;">
 <center><font size="7" color="#FFF">IITD GradeSpot by DevClub</font></center><br><br>
 
-<form id="login" action="/devclub/grades/" method="POST">
+<form id="login" action="/devclub/grades" method="POST">
 <font size="5" color="#FFF" style="margin-left:2vw">Kerberos ID</font>><br>
 <font size="5" color="#FFF" style="margin-left:2vw"><input type="text" style="width:34vw;" name="username"></input><br><br>
 
