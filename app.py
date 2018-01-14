@@ -95,15 +95,13 @@ app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
 
-
-
 @app.route("/")
 def main(invalid_password=False):
-    if invalid_password:
-	error="Login details do not match"
-	return render_template('index.html',error=error)
-    else:
-    	return render_template('index.html')
+	if invalid_password:
+		error="Login details do not match"
+		return render_template('index.html',error=error)
+	else:
+		return render_template('index.html')
 
 @app.route("/",methods=['POST'])
 def main_form():
