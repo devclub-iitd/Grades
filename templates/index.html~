@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Grade View</title>
+  <meta name="description" content="particles.js is a lightweight JavaScript library for creating particles.">
+  <meta name="author" content="Vincent Garreau" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" media="screen" href="css/style2.css">
+</head>
+<body>
+
+<!-- count particles -->
+
+      
+<!-- particles.js container -->
+<div id="particles-js" style="z-index: 1; position: absolute; top: 0px; left: 0px;">
+	<div style="border-radius:15px; z-index: 2; position: absolute; top: 0px; left: 0px;  height:50vh; width:40vw; background:#023; opacity:0.5; margin-top:20vh; margin-left:30vw; text-align:center;">
+<center><font size="7" color="#FFF">IITD GradeSpot by DevClub</font></center><br><br>
+
+<form id="login" action="/devclub/grades" method="POST">
+<font size="5" color="#FFF" style="margin-left:2vw">Kerberos ID</font>><br>
+<font size="5" color="#FFF" style="margin-left:2vw"><input type="text" style="width:34vw;" name="username"></input><br><br>
+
+<font size="5" color="#FFF" style="margin-left:2vw">Password</font><br>
+<font size="5" color="#FFF" style="margin-left:2vw"><input type="password" style="width:34vw;" name="password"></input><br><br>
+
+  <img src="img.jpg" style="border-radius:20px" height="200" width="400"/>
+<center><font size="5" color="#FFF"><button type="submit" style="border-radius:5px;">Login</button></font></center><br><br>
+</form>
+	</div>
+</div>
+<!-- scripts -->
+<script src="js/particles.js"></script>
+<script src="js/app.js"></script>
+
+<!-- stats.js -->
+
+
+<script>
+  {% if error %}
+	 alert(' {{ error }}'); 
+      {% endif %}
+  var count_particles, stats, update;
+  stats = new Stats;
+  stats.setMode(0);
+  stats.domElement.style.position = 'absolute';
+  stats.domElement.style.left = '0px';
+  stats.domElement.style.top = '0px';
+  document.body.appendChild(stats.domElement);
+  count_particles = document.querySelector('.js-count-particles');
+  update = function() {
+    stats.begin();
+    stats.end();
+    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
+      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
+    }
+    requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+</script>
+
+</body>
+</html>

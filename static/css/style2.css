@@ -117,3 +117,8 @@ canvas{
   background-position: 50% 50%;
   background-repeat: no-repeat;
 }
+#form-link{
+  /* text-decoration: none; */
+  color: white;
+
+}
