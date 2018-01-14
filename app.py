@@ -1,4 +1,5 @@
 from flask import Flask, render_template,request
+from flask import Markup
 #from scrape import find_grades
 import mechanize
 import cookielib
@@ -8,6 +9,8 @@ import string
 import socket
 import httplib
 import ssl
+
+ACADEMICS_URL = 'https://academics1.iitd.ac.in'
 
 def find_grades(username,password):
 
@@ -40,7 +43,7 @@ def find_grades(username,password):
 	br.addheaders = [('User-agent', 'Chrome')]
 
 	# The site we will navigate into, handling it's session
-	br.open('https://academics1.iitd.ac.in')
+	br.open(ACADEMICS_URL)
 
 
 	# Select the second (index one) form (the first form is a search query box)
@@ -53,33 +56,26 @@ def find_grades(username,password):
 	# Login
 	br.submit()
 	soup = BeautifulSoup(str(br.open(br.geturl()).read()),"lxml")
-	link=None
-	link1=None
+	current_grades_link=None
+	past_grades_link=None
 	for i in soup.find_all('a'):
 		if 'vgrd' in str(i.get('href')):
-			link=i.get('href')
-			#break
+			current_grades_link=i.get('href')
 		if 'grade' in str(i.get('href')):
-			link1=i.get('href')
-			#break
-	if (link is None) and (link1 is None):
-		return main(True)
-		#return "Invalid Login!!"
+			past_grades_link=i.get('href')
+
+	if (current_grades_link is None) and (past_grades_link is None):
+		return (True,"Invalid Login Credentials")
 
 	def remove_attrs(soup):
 	    for tag in soup.findAll(True):
 	        tag.attrs = None
 	    return soup
 
-	page = open("table.html",'r')
-	template = BeautifulSoup(page.read(),"html5lib")
+	grades_str = ''	
+	if not(past_grades_link is None):
 
-	if not(link1 is None):
-
-		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link1).read()
-		#print
-	
-		# table_tag = soup.find('table')
+		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+past_grades_link).read()
 
 		soup = BeautifulSoup(gradesheet,"html5lib")
 		soup_without_attributes=remove_attrs(soup)
@@ -88,30 +84,26 @@ def find_grades(username,password):
 			for x in div.find_all():
 			    if len(x.text) == 0:
 					x.extract()
-		# print(final_soup)
+
 		limit=len(final_soup)
 		for i in range(2,limit):
-			##final_soup[i]
-			template.div.append(final_soup[i])
+			grades_str += str(final_soup[i])
 
-	if not(link is None):
+	if not(current_grades_link is None):
 		
-		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+link).read()
-		#print
-	
-		# table_tag = soup.find('table')
+		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+current_grades_link).read()
 
 		soup = BeautifulSoup(gradesheet,"html5lib")
 		soup_without_attributes=remove_attrs(soup)
 		final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')[2]
-		# print (final_soup)		
+
 		for x in final_soup.find_all():
 		    if len(x.text) == 0:
 				x.extract()
 
-		template.div.append(final_soup)
+		grades_str += str(final_soup)
 
-	return str(template)
+	return (False,grades_str)
 
 
 
@@ -126,18 +118,19 @@ app = Flask(__name__,
             template_folder='templates')
 
 @app.route("/")
-def main(invalid_password=False):
-	if invalid_password:
-		error="Login details do not match"
-		return render_template('index.html',error=error)
-	else:
-		return render_template('index.html')
+def main():
+	return render_template('index.html')
 
 @app.route("/",methods=['POST'])
 def main_form():
 	username=request.form['username']
 	password=request.form['password']
-	return find_grades(username,password)
+	(err,res) = find_grades(username,password)
+	if(err):
+		return render_template('index.html',error=res)
+	else:
+		grades = Markup(res)
+		return render_template('table.html',grades=grades)
 
 
 

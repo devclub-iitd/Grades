@@ -18,3 +18,4 @@ ignore/
 *.out
 .m~
 
+.vscode/

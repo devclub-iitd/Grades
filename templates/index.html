@@ -1,58 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <title>Grade View</title>
-  <meta name="author" content="Dev Club IIT Delhi" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" media="screen" href="css/style2.css">
+	<title>GradeSpot</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="images/logo.jpg"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
 </head>
 <body>
+	
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('images/bg.jpg');">
+			<div class="wrap-login100">
+				<form method="post" action="" class="login100-form validate-form">
+					<span class="login100-form-logo">
+						<img src="images/logo.jpg" style="border-radius:20px" height="150" width="300"/>
+					</span>
 
+					<span class="login100-form-title p-b-34 p-t-27">
+						IITD GradeSpot
+					</span>
 
-      
-<div style="border-radius:15px; z-index: 2; position: absolute; top: 0px; left: 0px;  height:50vh; width:40vw; background:#023; opacity:0.5; margin-top:20vh; margin-left:30vw; text-align:center;">
-  <center><font size="7" color="#FFF">IITD GradeSpot by DevClub</font></center><br><br>
+					<div class="wrap-input100 validate-input" data-validate = "Enter username">
+						<input class="input100" type="text" name="username" placeholder="Kerberos ID">
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
 
-  <form id="login" action="" method="POST">
-    <font size="5" color="#FFF" style="margin-left:2vw">Kerberos ID</font>><br>
-    <font size="5" color="#FFF" style="margin-left:2vw"><input type="text" style="width:34vw;" name="username"></input><br><br>
+					<div class="wrap-input100 validate-input" data-validate="Enter password">
+						<input class="input100" type="password" name="password" placeholder="Password">
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
 
-    <font size="5" color="#FFF" style="margin-left:2vw">Password</font><br>
-    <font size="5" color="#FFF" style="margin-left:2vw"><input type="password" style="width:34vw;" name="password"></input><br><br>
-    <img src="img.jpg" style="border-radius:20px" height="200" width="400"/>
-    <center><font size="5" color="#FFF"><button type="submit" style="border-radius:5px;">Login</button></font></center><br><br>
-  </form>
-  <h3>
-    <a id="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLScPwizIa6I62uZWx5IX3VxKFJKm8x-IH2j17eGkPl_woJMTeA/viewform" target="_blank">Complaint/Bug/Suggestion</a>
-  </h3>
-  
-</div>
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn">
+							Login
+						</button>
+					</div>
 
+				</form>
+				<br><a class="input100" style="text-align:center" id="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLScPwizIa6I62uZWx5IX3VxKFJKm8x-IH2j17eGkPl_woJMTeA/viewform" target="_blank">Report Bugs/Suggestion</a>
+			</div>
+			
+		</div>
+	</div>
+	
 
-<script>
-  {% if error %}
-	 alert(' {{ error }}'); 
-      {% endif %}
-  var count_particles, stats, update;
-  stats = new Stats;
-  stats.setMode(0);
-  stats.domElement.style.position = 'absolute';
-  stats.domElement.style.left = '0px';
-  stats.domElement.style.top = '0px';
-  document.body.appendChild(stats.domElement);
-  count_particles = document.querySelector('.js-count-particles');
-  update = function() {
-    stats.begin();
-    stats.end();
-    if (window.pJSDom[0].pJS.particles && window.pJSDom[0].pJS.particles.array) {
-      count_particles.innerText = window.pJSDom[0].pJS.particles.array.length;
-    }
-    requestAnimationFrame(update);
-  };
-  requestAnimationFrame(update);
-</script>
+	<div id="dropDownSelect1"></div>
+	
+<!--===============================================================================================-->
+	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/bootstrap/js/popper.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/daterangepicker/moment.min.js"></script>
+	<script src="vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+	<script src="js/main.js"></script>
 
+	<script>
+		{% if error %}
+		   alert(' {{ error }}'); 
+			{% endif %}
+	  </script>
+	  
 </body>
 </html>
