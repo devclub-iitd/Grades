@@ -1,6 +1,6 @@
 # Grade View
 
-View Grades from home
+Grades can be accessed from academics website, which itself is available only on IIT Delhi Intranet. By using this webapp one could check grades without accessing it from Intranet.
 
 --------------------------------------
 
@@ -14,10 +14,3 @@ View Grades from home
     `python app.py`
 
 Note:- Modify the link to submit form in template/index.html for page to work properly.
-
--------------------------------------
-
-## Future Improvements
-
-1. Automatically calculate new grades CGPA from incomplete information.
-2. Improve the UI
