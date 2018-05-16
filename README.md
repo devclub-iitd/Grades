@@ -1,4 +1,4 @@
-# Grade View
+# [Grade View](http://www.cse.iitd.ac.in/devclub/grades/)
 
 Grades can be accessed from academics website, which itself is available only on IIT Delhi Intranet. By using this webapp one could check grades without accessing it from Intranet.
 
