@@ -10,7 +10,9 @@ import socket
 import httplib
 import ssl
 
-ACADEMICS_URL = 'https://academics1.iitd.ac.in'
+ACADEMICS_URL = 'https://academics1.iitd.ac.in/Academics/'
+
+
 
 def find_grades(username,password):
 
@@ -43,7 +45,7 @@ def find_grades(username,password):
 	br.addheaders = [('User-agent', 'Chrome')]
 
 	# The site we will navigate into, handling it's session
-	br.open(ACADEMICS_URL)
+        r = br.open(ACADEMICS_URL)
 
 
 	# Select the second (index one) form (the first form is a search query box)
@@ -125,12 +127,12 @@ def main():
 def main_form():
 	username=request.form['username']
 	password=request.form['password']
-	(err,res) = find_grades(username,password)
+        (err,res) = find_grades(username,password)
 	if(err):
 		return render_template('index.html',error=res)
 	else:
-		grades = Markup(res)
-		return render_template('table.html',grades=grades)
+		grades = Markup(res.decode("utf-8").encode('ascii','ignore'))
+                return render_template('table.html',grades=grades)
 
 
 
@@ -139,4 +141,4 @@ def static_file(path):
     return app.send_static_file(path)
 
 if __name__ == "__main__":
-    app.run(port=5050)
+    app.run(port=5051)
