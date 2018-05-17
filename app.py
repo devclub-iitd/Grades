@@ -75,21 +75,21 @@ def find_grades(username,password):
 	    return soup
 
 	grades_str = ''	
-	if not(past_grades_link is None):
+	# if not(past_grades_link is None):
 
-		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+past_grades_link).read()
+	# 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+past_grades_link).read()
 
-		soup = BeautifulSoup(gradesheet,"html5lib")
-		soup_without_attributes=remove_attrs(soup)
-		final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')
-		for div in final_soup:
-			for x in div.find_all():
-			    if len(x.text) == 0:
-					x.extract()
+	# 	soup = BeautifulSoup(gradesheet,"html5lib")
+	# 	soup_without_attributes=remove_attrs(soup)
+	# 	final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')
+	# 	for div in final_soup:
+	# 		for x in div.find_all():
+	# 		    if len(x.text) == 0:
+	# 				x.extract()
 
-		limit=len(final_soup)
-		for i in range(2,limit):
-			grades_str += str(final_soup[i])
+	# 	limit=len(final_soup)
+	# 	for i in range(2,limit):
+	# 		grades_str += str(final_soup[i])
 
 	if not(current_grades_link is None):
 		
