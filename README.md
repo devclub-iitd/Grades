@@ -14,3 +14,6 @@ Grades can be accessed from academics website, which itself is available only on
     `python app.py`
 
 Note:- Modify the link to submit form in template/index.html for page to work properly.
+
+# Report Bugs/Suggestions
+Follow this link - http://bit.do/bugsuggestion to report a bug or give a suggestion.
