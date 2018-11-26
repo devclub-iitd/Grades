@@ -1,144 +1,124 @@
-from flask import Flask, render_template,request
+from flask import Flask, render_template, request
+import requests
+import threading
 from flask import Markup
-#from scrape import find_grades
-import mechanize
-import cookielib
-from bs4 import BeautifulSoup,NavigableString
-import html2text
-import string
-import socket
-import httplib
-import ssl
+from bs4 import BeautifulSoup
 
 ACADEMICS_URL = 'https://academics1.iitd.ac.in/Academics/'
+class getData(threading.Thread):
+	def __init__(self, url, type_):
+		self.url = url
+		self.data = None
+		self.type = type_
+		threading.Thread.__init__(self)
+
+	def run(self):
+		r_loc = requests.post(
+			ACADEMICS_URL + self.url, verify=False)
+		if(type == "new" and self.url is not None):
+			self.data = r_loc.text
+		elif(self.url is not None):
+			self.data = r_loc.text
+
+	def get_fetched_data(self):
+		return self.data
 
 
+def find_grades(username, password):
 
-def find_grades(username,password):
+	r = requests.post(ACADEMICS_URL + "index.php?page=tryLogin",
+					  data={'username': username, 'password': password}, verify=False)
 
-	def connect(self):		#some code to deal with certificate validation
-    		sock = socket.create_connection((self.host, self.port),
-                                self.timeout, self.source_address)
-    		if self._tunnel_host:
-    			self.sock = sock
-    			self._tunnel()
+	soup = BeautifulSoup(r.text, features="html.parser")
 
-    		self.sock = ssl.wrap_socket(sock, self.key_file, self.cert_file, ssl_version=ssl.PROTOCOL_TLSv1)
+	new_grades_url = None
+	all_grades_url = None
 
+	for link in soup.findAll('a'):
+		link_url = link.get('href')
+		if (link_url.find('vgrd') != -1):
+			new_grades_url = link_url
+		if (link_url.find('grade') != -1):
+			all_grades_url = link_url
 
-	httplib.HTTPSConnection.connect = connect
-	# Browser
-	br = mechanize.Browser()
+	all_grades_thread = getData(all_grades_url, "all")
+	all_grades_thread.start()
+	new_grades_thread = getData(new_grades_url, "new")
+	new_grades_thread.start()
 
-	# Cookie Jar
-	cj = cookielib.LWPCookieJar()
-	br.set_cookiejar(cj)
+	all_grades_thread.join()
+	new_grades_thread.join()
 
-	# Browser options
-	br.set_handle_equiv(True)
-	br.set_handle_gzip(True)
-	br.set_handle_redirect(True)
-	br.set_handle_referer(True)
-	br.set_handle_robots(False)
-	br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+	all_grades_data = all_grades_thread.get_fetched_data()
+	new_grades_data = new_grades_thread.get_fetched_data()
 
-	br.addheaders = [('User-agent', 'Chrome')]
-
-	# The site we will navigate into, handling it's session
-        r = br.open(ACADEMICS_URL)
-
-
-	# Select the second (index one) form (the first form is a search query box)
-	br.select_form(nr=0)
-
-	# User credentials
-	br.form['username'] = username
-	br.form['password'] = password
-
-	# Login
-	br.submit()
-	soup = BeautifulSoup(str(br.open(br.geturl()).read()),"lxml")
-	current_grades_link=None
-	past_grades_link=None
-	for i in soup.find_all('a'):
-		if 'vgrd' in str(i.get('href')):
-			current_grades_link=i.get('href')
-		if 'grade' in str(i.get('href')):
-			past_grades_link=i.get('href')
-
-	if (current_grades_link is None) and (past_grades_link is None):
-		return (True,"Invalid Login Credentials")
+	if (new_grades_url is None) and (all_grades_url is None):
+		return (True, "Invalid Login Credentials")
 
 	def remove_attrs(soup):
-	    for tag in soup.findAll(True):
-	        tag.attrs = None
-	    return soup
+		for tag in soup.findAll(True):
+			tag.attrs = None
+		return soup
 
-	grades_str = ''	
-	# if not(past_grades_link is None):
+	grades_str = ''
 
-	# 	gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+past_grades_link).read()
+	if not(all_grades_url is None or all_grades_data is None):
 
-	# 	soup = BeautifulSoup(gradesheet,"html5lib")
-	# 	soup_without_attributes=remove_attrs(soup)
-	# 	final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')
-	# 	for div in final_soup:
-	# 		for x in div.find_all():
-	# 		    if len(x.text) == 0:
-	# 				x.extract()
+		soup = BeautifulSoup(all_grades_data, features="html.parser")
+		soup_without_attributes = remove_attrs(soup)
+		final_soup = soup_without_attributes.findAll(
+			'table')[0].findAll('table')[1].findAll('table')
+		for div in final_soup:
+			for x in div.find_all():
+				if len(x.text) == 0:
+					x.extract()
 
-	# 	limit=len(final_soup)
-	# 	for i in range(2,limit):
-	# 		grades_str += str(final_soup[i])
+		limit = len(final_soup)
+		for i in range(2, limit):
+			grades_str += str(final_soup[i])
 
-	if not(current_grades_link is None):
-		
-		gradesheet=br.open("https://academics1.iitd.ac.in/Academics/"+current_grades_link).read()
+	if not(new_grades_url is None or new_grades_data is None):
 
-		soup = BeautifulSoup(gradesheet,"html5lib")
-		soup_without_attributes=remove_attrs(soup)
-		final_soup =soup_without_attributes.findAll('table')[0].findAll('table')[1].findAll('table')[2]
-
+		soup = BeautifulSoup(new_grades_data, features="html.parser")
+		soup_without_attributes = remove_attrs(soup)
+		final_soup = soup_without_attributes.findAll('table')[0].findAll('table')[
+			1].findAll('table')[2]
 		for x in final_soup.find_all():
-		    if len(x.text) == 0:
+			if len(x.text) == 0:
 				x.extract()
 
 		grades_str += str(final_soup)
 
-	return (False,grades_str)
-
-
-
-
-
-
+	return (False, grades_str)
 
 
 app = Flask(__name__,
-            static_url_path='',
-            static_folder='static',
-            template_folder='templates')
+			static_url_path='',
+			static_folder='static',
+			template_folder='templates')
+
 
 @app.route("/")
 def main():
 	return render_template('index.html')
 
-@app.route("/",methods=['POST'])
-def main_form():
-	username=request.form['username']
-	password=request.form['password']
-        (err,res) = find_grades(username,password)
-	if(err):
-		return render_template('index.html',error=res)
-	else:
-		grades = Markup(res.decode("utf-8").encode('ascii','ignore'))
-                return render_template('table.html',grades=grades)
 
+@app.route("/", methods=['POST'])
+def main_form():
+	username = request.form['username']
+	password = request.form['password']
+	(err, res) = find_grades(username, password)
+	if(err):
+		return render_template('index.html', error=res)
+	else:
+		grades = Markup(res.encode('ascii', 'ignore'))
+		return render_template('table.html', grades=grades)
 
 
 @app.route('/<path:path>')
 def static_file(path):
-    return app.send_static_file(path)
+	return app.send_static_file(path)
+
 
 if __name__ == "__main__":
-    app.run(port=5051)
+	app.run(port=5051)

@@ -6,7 +6,7 @@ Grades can be accessed from academics website, which itself is available only on
 
 ## Instructions to run
 
-1. Install python 2.7
+1. Install python 3.6 or above.
 2. Create virtual env and activate it.
 3. Install requirements using requirements.txt and pip with command :-
     `pip install -r requirements.txt`
