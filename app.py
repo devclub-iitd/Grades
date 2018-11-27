@@ -15,7 +15,7 @@ class getData(threading.Thread):
 	def run(self):
 		r_loc = requests.post(
 			ACADEMICS_URL + self.url, verify=False)
-		if(type == "new" and self.url is not None):
+		if(self.type == "new" and self.url is not None):
 			self.data = r_loc.text
 		elif(self.url is not None):
 			self.data = r_loc.text
@@ -62,6 +62,19 @@ def find_grades(username, password):
 
 	grades_str = ''
 
+	if not(new_grades_url is None or new_grades_data is None):
+
+		soup = BeautifulSoup(new_grades_data, features="html.parser")
+		soup_without_attributes = remove_attrs(soup)
+		final_soup = soup_without_attributes.findAll('table')[0].findAll('table')[
+			1].findAll('table')[2]
+		for x in final_soup.find_all():
+			if len(x.text) == 0:
+				x.extract()
+
+		grades_str += str(final_soup)
+
+
 	if not(all_grades_url is None or all_grades_data is None):
 
 		soup = BeautifulSoup(all_grades_data, features="html.parser")
@@ -77,17 +90,6 @@ def find_grades(username, password):
 		for i in range(2, limit):
 			grades_str += str(final_soup[i])
 
-	if not(new_grades_url is None or new_grades_data is None):
-
-		soup = BeautifulSoup(new_grades_data, features="html.parser")
-		soup_without_attributes = remove_attrs(soup)
-		final_soup = soup_without_attributes.findAll('table')[0].findAll('table')[
-			1].findAll('table')[2]
-		for x in final_soup.find_all():
-			if len(x.text) == 0:
-				x.extract()
-
-		grades_str += str(final_soup)
 
 	return (False, grades_str)
 
@@ -111,7 +113,7 @@ def main_form():
 	if(err):
 		return render_template('index.html', error=res)
 	else:
-		grades = Markup(res.encode('ascii', 'ignore'))
+		grades = Markup(res.encode('ascii', 'ignore').decode())
 		return render_template('table.html', grades=grades)
 
 
