@@ -2,9 +2,10 @@ from flask import Flask, render_template, request, Markup
 from bs4 import BeautifulSoup
 import requests
 import threading
+import urllib3
 
 ACADEMICS_URL = 'https://academics1.iitd.ac.in/Academics/'
-
+urllib3.disable_warnings()
 
 def remove_attrs(soup):
     for tag in soup.findAll(True):

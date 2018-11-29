@@ -19,3 +19,5 @@ ignore/
 .m~
 
 .vscode/
+
+access_log.txt
